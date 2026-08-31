@@ -7,330 +7,227 @@
 <title>운동일지 & 벌금 관리</title>
 
 <style>
-  * { box-sizing: border-box; }
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,"Noto Sans KR",sans-serif;
+  background:#f5f6f8;
+  color:#222
+}
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:24px 16px 50px
+}
+h1{margin:0 0 6px;font-size:30px}
+.subtitle{color:#777;margin-bottom:22px}
 
-  body {
-    margin: 0;
-    font-family: Arial, "Noto Sans KR", sans-serif;
-    background: #f5f6f8;
-    color: #222;
-  }
+.card,.user-box,.weekbar,.record,.members,.history{
+  background:white;
+  border-radius:14px;
+  padding:18px;
+  box-shadow:0 2px 10px rgba(0,0,0,.06)
+}
 
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 24px 16px 50px;
-  }
+.user-box{margin-bottom:18px}
 
-  h1 { margin: 0 0 6px; font-size: 30px; }
-  .subtitle { color: #777; margin-bottom: 22px; }
+.login-row{
+  display:flex;
+  align-items:center;
+  gap:12px
+}
 
-  .user-box {
-    background: white;
-    border-radius: 14px;
-    padding: 18px;
-    margin-bottom: 18px;
-    box-shadow: 0 2px 10px rgba(0,0,0,.06);
-  }
+.profile{
+  flex:1;
+  display:flex;
+  align-items:center;
+  gap:10px
+}
 
-  .user-box-title {
-    font-weight: 700;
-    margin-bottom: 10px;
-  }
+.profile img{
+  width:42px;
+  height:42px;
+  border-radius:50%
+}
 
-  .user-row {
-    display: flex;
-    gap: 8px;
-  }
+.login-name{font-weight:700}
+.login-email{font-size:12px;color:#777;margin-top:3px}
 
-  .user-row input {
-    flex: 1;
-  }
+.google-btn{
+  background:white;
+  color:#333;
+  border:1px solid #ddd;
+  box-shadow:0 1px 3px rgba(0,0,0,.08)
+}
 
-  .summary {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 18px;
-  }
+.logout-btn{
+  background:#e9eaed;
+  color:#333
+}
 
-  .card {
-    background: white;
-    border-radius: 14px;
-    padding: 18px;
-    box-shadow: 0 2px 10px rgba(0,0,0,.06);
-  }
+.summary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:18px
+}
 
-  .label {
-    color: #777;
-    font-size: 14px;
-    margin-bottom: 8px;
-  }
+.label{color:#777;font-size:14px;margin-bottom:8px}
+.value{font-size:25px;font-weight:700}
 
-  .value {
-    font-size: 25px;
-    font-weight: 700;
-  }
+.weekbar{margin-bottom:18px}
 
-  .weekbar {
-    background: white;
-    border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 18px;
-    box-shadow: 0 2px 10px rgba(0,0,0,.06);
-  }
+.week-nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px
+}
 
-  .week-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-  }
+button{
+  border:0;
+  border-radius:9px;
+  padding:10px 14px;
+  cursor:pointer;
+  font-size:14px;
+  background:#222;
+  color:white
+}
 
-  button {
-    border: 0;
-    border-radius: 9px;
-    padding: 10px 14px;
-    cursor: pointer;
-    font-size: 14px;
-    background: #222;
-    color: white;
-  }
+button.secondary{
+  background:#e9eaed;
+  color:#333
+}
 
-  button.secondary {
-    background: #e9eaed;
-    color: #333;
-  }
+button.danger{background:#d93025}
 
-  button.danger {
-    background: #d93025;
-  }
+.week-title{
+  font-weight:700;
+  font-size:18px;
+  text-align:center
+}
 
-  .week-title {
-    font-weight: 700;
-    font-size: 18px;
-    text-align: center;
-  }
+.days{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:8px;
+  margin-top:16px
+}
 
-  .days {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
-    margin-top: 16px;
-  }
+.day{
+  background:#f0f1f3;
+  border-radius:12px;
+  padding:12px 5px;
+  text-align:center;
+  cursor:pointer;
+  border:2px solid transparent
+}
 
-  .day {
-    background: #f0f1f3;
-    border-radius: 12px;
-    padding: 12px 5px;
-    text-align: center;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: .15s;
-  }
+.day:hover{transform:translateY(-1px)}
+.day.checked{
+  background:#e5f7ea;
+  border-color:#35a853
+}
+.day .dow{font-size:13px;color:#666}
+.day .date{font-size:16px;font-weight:700;margin:6px 0}
+.day .status{font-size:20px}
 
-  .day:hover {
-    transform: translateY(-1px);
-  }
+.record{margin-bottom:18px}
+.record h2{margin:0 0 5px}
+.hint{color:#777;font-size:13px;margin-bottom:16px}
 
-  .day.checked {
-    background: #e5f7ea;
-    border-color: #35a853;
-  }
+label{
+  display:block;
+  font-weight:700;
+  margin:14px 0 7px
+}
 
-  .day .dow {
-    font-size: 13px;
-    color: #666;
-  }
+input,textarea{
+  width:100%;
+  border:1px solid #d5d7db;
+  border-radius:9px;
+  padding:11px;
+  font-size:15px;
+  font-family:inherit
+}
 
-  .day .date {
-    font-size: 16px;
-    font-weight: 700;
-    margin: 6px 0;
-  }
+textarea{min-height:110px;resize:vertical}
 
-  .day .status {
-    font-size: 20px;
-  }
+.record-actions{
+  display:flex;
+  gap:8px;
+  margin-top:16px
+}
 
-  .record {
-    background: white;
-    border-radius: 14px;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,.06);
-  }
+.status-box{
+  margin-top:18px;
+  margin-bottom:18px;
+  padding:15px;
+  border-radius:10px;
+  background:#f1f3f4;
+  font-weight:700
+}
 
-  .record h2 {
-    margin: 0 0 5px;
-  }
+.status-box.warning{
+  background:#fff0f0;
+  color:#c5221f
+}
 
-  .hint {
-    color: #777;
-    font-size: 13px;
-    margin-bottom: 16px;
-  }
+.status-box.success{
+  background:#e8f5e9;
+  color:#188038
+}
 
-  label {
-    display: block;
-    font-weight: 700;
-    margin: 14px 0 7px;
-  }
+.members{margin-bottom:18px}
+.members h2,.history h2{margin-top:0}
 
-  input, textarea {
-    width: 100%;
-    border: 1px solid #d5d7db;
-    border-radius: 9px;
-    padding: 11px;
-    font-size: 15px;
-    font-family: inherit;
-  }
+.member-row,.history-row{
+  display:grid;
+  grid-template-columns:1.2fr .8fr .8fr;
+  gap:8px;
+  padding:11px 0;
+  border-bottom:1px solid #eee;
+  font-size:14px
+}
 
-  textarea {
-    min-height: 110px;
-    resize: vertical;
-  }
+.member-row:last-child,.history-row:last-child{
+  border-bottom:0
+}
 
-  .record-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 16px;
-  }
+.member-header{font-weight:700}
+.empty{color:#888;padding:10px 0}
 
-  .status-box {
-    margin-top: 18px;
-    padding: 15px;
-    border-radius: 10px;
-    background: #f1f3f4;
-    font-weight: 700;
-  }
+.login-screen{
+  text-align:center;
+  padding:40px 20px
+}
 
-  .status-box.warning {
-    background: #fff0f0;
-    color: #c5221f;
-  }
+.login-screen button{
+  margin-top:15px
+}
 
-  .status-box.success {
-    background: #e8f5e9;
-    color: #188038;
-  }
+.footer{
+  text-align:center;
+  color:#888;
+  font-size:12px;
+  margin-top:20px
+}
 
-  .members {
-    margin-top: 18px;
-    background: white;
-    border-radius: 14px;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,.06);
-  }
-
-  .members h2 {
-    margin-top: 0;
-  }
-
-  .member-row {
-    display: grid;
-    grid-template-columns: 1.2fr .8fr .8fr;
-    gap: 8px;
-    padding: 11px 0;
-    border-bottom: 1px solid #eee;
-    font-size: 14px;
-  }
-
-  .member-row:last-child {
-    border-bottom: 0;
-  }
-
-  .member-header {
-    font-weight: 700;
-  }
-
-  .history {
-    margin-top: 18px;
-    background: white;
-    border-radius: 14px;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,.06);
-  }
-
-  .history h2 {
-    margin-top: 0;
-  }
-
-  .history-row {
-    display: grid;
-    grid-template-columns: 1.2fr .8fr .8fr;
-    gap: 8px;
-    padding: 11px 0;
-    border-bottom: 1px solid #eee;
-    font-size: 14px;
-  }
-
-  .history-row:last-child {
-    border-bottom: 0;
-  }
-
-  .empty {
-    color: #888;
-    padding: 10px 0;
-  }
-
-  .loading {
-    text-align: center;
-    padding: 20px;
-    color: #777;
-  }
-
-  .footer {
-    text-align: center;
-    color: #888;
-    font-size: 12px;
-    margin-top: 20px;
-  }
-
-  @media (max-width: 650px) {
-    .container {
-      padding: 18px 10px 35px;
-    }
-
-    h1 {
-      font-size: 25px;
-    }
-
-    .summary {
-      grid-template-columns: 1fr;
-    }
-
-    .days {
-      gap: 4px;
-    }
-
-    .day {
-      padding: 9px 2px;
-    }
-
-    .day .dow {
-      font-size: 11px;
-    }
-
-    .day .date {
-      font-size: 13px;
-    }
-
-    .day .status {
-      font-size: 17px;
-    }
-
-    .week-nav button {
-      padding: 8px 9px;
-    }
-
-    .week-title {
-      font-size: 15px;
-    }
-
-    .user-row {
-      flex-direction: column;
-    }
-  }
+@media(max-width:650px){
+  .container{padding:18px 10px 35px}
+  h1{font-size:25px}
+  .summary{grid-template-columns:1fr}
+  .days{gap:4px}
+  .day{padding:9px 2px}
+  .day .dow{font-size:11px}
+  .day .date{font-size:13px}
+  .day .status{font-size:17px}
+  .week-nav button{padding:8px 9px}
+  .week-title{font-size:15px}
+  .login-row{align-items:stretch}
+  .profile{min-width:0}
+  .login-row{flex-wrap:wrap}
+}
 </style>
 </head>
 
@@ -338,22 +235,53 @@
 
 <div class="container">
 
-  <h1>🏋️ 운동일지</h1>
-  <div class="subtitle">일주일에 4일 이상 운동하기</div>
+<h1>🏋️ 운동일지</h1>
+<div class="subtitle">일주일에 4일 이상 운동하기</div>
 
-  <div class="user-box">
-    <div class="user-box-title">👤 사용자</div>
+<!-- 로그인 -->
+<div class="user-box">
 
-    <div class="user-row">
-      <input id="userName" placeholder="이름을 입력하세요">
-      <button onclick="saveUserName()">이름 저장</button>
+  <div id="loginScreen" class="login-screen">
+    <div style="font-size:18px;font-weight:700;">
+      👤 로그인해주세요
     </div>
 
-    <div id="currentUserText"
-         style="margin-top:10px;color:#777;font-size:13px;">
-      로그인 중...
+    <div style="color:#777;font-size:13px;margin-top:7px;">
+      Google 계정으로 로그인하면 운동 기록을 사용할 수 있습니다.
     </div>
+
+    <button class="google-btn" onclick="googleLogin()">
+      🔵 Google로 로그인
+    </button>
   </div>
+
+  <div id="userScreen" style="display:none">
+
+    <div class="login-row">
+
+      <div class="profile">
+
+        <img id="profileImage" src="" alt="프로필">
+
+        <div>
+          <div class="login-name" id="userName"></div>
+          <div class="login-email" id="userEmail"></div>
+        </div>
+
+      </div>
+
+      <button class="logout-btn" onclick="logout()">
+        로그아웃
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div id="app" style="display:none">
 
   <div class="summary">
 
@@ -374,9 +302,11 @@
 
   </div>
 
+
   <div class="weekbar">
 
     <div class="week-nav">
+
       <button class="secondary" onclick="moveWeek(-1)">
         ← 이전 주
       </button>
@@ -386,15 +316,17 @@
       <button class="secondary" onclick="moveWeek(1)">
         다음 주 →
       </button>
+
     </div>
 
-    <div style="text-align:center;margin-top:10px;">
+    <div style="text-align:center;margin-top:10px">
       <button onclick="goToday()">이번 주로</button>
     </div>
 
     <div class="days" id="days"></div>
 
   </div>
+
 
   <div class="record">
 
@@ -404,49 +336,60 @@
       운동한 날을 선택하면 운동 기록을 작성할 수 있습니다.
     </div>
 
-    <label for="exercise">운동 종류</label>
-    <input id="exercise"
-           placeholder="예: 헬스, 러닝, 등 운동">
+    <label>운동 종류</label>
+    <input id="exercise" placeholder="예: 헬스, 러닝, 등 운동">
 
-    <label for="duration">운동 시간</label>
-    <input id="duration"
-           placeholder="예: 1시간 20분">
+    <label>운동 시간</label>
+    <input id="duration" placeholder="예: 1시간 20분">
 
-    <label for="memo">운동 내용 / 메모</label>
+    <label>운동 내용 / 메모</label>
 
     <textarea id="memo"
-              placeholder="오늘 한 운동이나 느낀 점을 적어보세요."></textarea>
+      placeholder="오늘 한 운동이나 느낀 점을 적어보세요."></textarea>
 
     <div class="record-actions">
-      <button onclick="saveRecord()">💾 저장</button>
-      <button class="danger" onclick="deleteRecord()">기록 삭제</button>
+
+      <button onclick="saveRecord()">
+        💾 저장
+      </button>
+
+      <button class="danger" onclick="deleteRecord()">
+        기록 삭제
+      </button>
+
     </div>
 
   </div>
 
+
   <div class="status-box" id="statusBox"></div>
+
 
   <div class="members">
 
     <h2>👥 전체 사용자 현황</h2>
 
     <div id="members">
-      <div class="loading">불러오는 중...</div>
+      <div class="empty">불러오는 중...</div>
     </div>
 
   </div>
 
+
   <div class="history">
 
-    <h2>📊 지난 주 기록</h2>
+    <h2>📊 지난 기록</h2>
 
     <div id="history"></div>
 
   </div>
 
-  <div class="footer">
-    데이터는 Firebase에 온라인으로 저장됩니다.
-  </div>
+</div>
+
+
+<div class="footer">
+  데이터는 Firebase에 온라인으로 저장됩니다.
+</div>
 
 </div>
 
@@ -473,203 +416,451 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
+const googleProvider = new firebase.auth.GoogleAuthProvider();
+
 let currentUser = null;
+let myData = {};
 let selectedDate = null;
 let currentWeekStart = getMonday(new Date());
-let myData = {};
 
 const DOW = ["월","화","수","목","금","토","일"];
 
 
-/* -----------------------------
-   날짜 관련
------------------------------ */
+/* =========================
+   Google 로그인
+========================= */
 
-function dateKey(date) {
+function googleLogin(){
 
-  const y = date.getFullYear();
+  auth.signInWithPopup(googleProvider)
 
-  const m = String(date.getMonth()+1).padStart(2,"0");
+  .catch(error => {
 
-  const d = String(date.getDate()).padStart(2,"0");
+    console.error(error);
 
-  return `${y}-${m}-${d}`;
+    if(error.code === "auth/popup-blocked"){
+      alert("브라우저에서 팝업이 차단되었습니다.");
+    }
+    else if(error.code === "auth/unauthorized-domain"){
+      alert(
+        "Firebase에서 stellae-282.github.io 도메인을 승인된 도메인에 추가해주세요."
+      );
+    }
+    else{
+      alert("Google 로그인에 실패했습니다.\n" + error.message);
+    }
+
+  });
+
 }
 
 
-function parseKey(key) {
+function logout(){
 
-  const [y,m,d] = key.split("-").map(Number);
+  if(!confirm("로그아웃할까요?")) return;
 
-  return new Date(y,m-1,d);
+  auth.signOut();
+
 }
 
 
-function getMonday(date) {
-
-  const d = new Date(date);
-
-  d.setHours(0,0,0,0);
-
-  const day = d.getDay();
-
-  const diff = day === 0 ? -6 : 1-day;
-
-  d.setDate(d.getDate()+diff);
-
-  return d;
-}
-
-
-function addDays(date,n) {
-
-  const d = new Date(date);
-
-  d.setDate(d.getDate()+n);
-
-  return d;
-}
-
-
-function getWeekDates(start) {
-
-  return Array.from(
-    {length:7},
-    (_,i)=>addDays(start,i)
-  );
-}
-
-
-function money(n) {
-
-  return n.toLocaleString("ko-KR") + "원";
-}
-
-
-/* -----------------------------
-   로그인
------------------------------ */
+/* =========================
+   로그인 상태
+========================= */
 
 auth.onAuthStateChanged(async user => {
 
-  if (user) {
+  currentUser = user;
 
-    currentUser = user;
+  if(user){
 
-    document.getElementById("currentUserText").textContent =
-      `로그인됨 · 사용자 ID: ${user.uid.substring(0,8)}...`;
+    document.getElementById("loginScreen").style.display="none";
+
+    document.getElementById("userScreen").style.display="block";
+
+    document.getElementById("app").style.display="block";
+
+    document.getElementById("userName").textContent =
+      user.displayName || "사용자";
+
+    document.getElementById("userEmail").textContent =
+      user.email || "";
+
+    document.getElementById("profileImage").src =
+      user.photoURL ||
+      "https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg";
+
+    await createUserIfNeeded();
 
     await loadMyData();
 
     listenMembers();
 
   }
+  else{
+
+    document.getElementById("loginScreen").style.display="block";
+
+    document.getElementById("userScreen").style.display="none";
+
+    document.getElementById("app").style.display="none";
+
+  }
 
 });
 
 
-async function loginAnonymous() {
+/* =========================
+   사용자 생성
+========================= */
 
-  try {
+async function createUserIfNeeded(){
 
-    await auth.signInAnonymously();
+  const ref =
+    db.ref("users/" + currentUser.uid);
 
-  } catch(error) {
+  const snapshot =
+    await ref.once("value");
 
-    console.error(error);
+  if(!snapshot.exists()){
 
-    alert(
-      "로그인에 실패했습니다.\n\n" +
-      "Firebase Authentication에서 '익명' 로그인을 켰는지 확인해주세요."
-    );
+    await ref.set({
+
+      name:
+        currentUser.displayName || "사용자",
+
+      email:
+        currentUser.email || "",
+
+      photoURL:
+        currentUser.photoURL || "",
+
+      records:{}
+
+    });
 
   }
 
 }
 
 
-loginAnonymous();
-
-
-/* -----------------------------
+/* =========================
    내 데이터
------------------------------ */
+========================= */
 
-async function loadMyData() {
-
-  if (!currentUser) return;
+async function loadMyData(){
 
   const snapshot =
-    await db.ref("users/" + currentUser.uid).once("value");
+    await db.ref(
+      "users/" + currentUser.uid
+    ).once("value");
 
-  myData = snapshot.val() || {};
-
-  if (myData.name) {
-
-    document.getElementById("userName").value =
-      myData.name;
-
-  }
+  myData =
+    snapshot.val() || {};
 
   render();
 
 }
 
 
-function saveUserName() {
+/* =========================
+   날짜
+========================= */
 
-  if (!currentUser) {
+function dateKey(date){
 
-    alert("로그인 중입니다. 잠시 기다려주세요.");
+  const y=date.getFullYear();
 
-    return;
+  const m=String(
+    date.getMonth()+1
+  ).padStart(2,"0");
 
-  }
+  const d=String(
+    date.getDate()
+  ).padStart(2,"0");
 
-  const name =
-    document.getElementById("userName").value.trim();
-
-  if (!name) {
-
-    alert("이름을 입력해주세요.");
-
-    return;
-
-  }
-
-  db.ref("users/" + currentUser.uid + "/name")
-    .set(name)
-    .then(() => {
-
-      myData.name = name;
-
-      document.getElementById("currentUserText").textContent =
-        `현재 사용자: ${name}`;
-
-      alert("이름이 저장되었습니다!");
-
-      listenMembers();
-
-    });
+  return `${y}-${m}-${d}`;
 
 }
 
 
-/* -----------------------------
-   운동 기록 저장
------------------------------ */
+function parseKey(key){
 
-function saveRecord() {
+  const [y,m,d]=
+    key.split("-").map(Number);
 
-  if (!currentUser) {
+  return new Date(y,m-1,d);
 
-    alert("로그인 중입니다.");
+}
+
+
+function getMonday(date){
+
+  const d=new Date(date);
+
+  d.setHours(0,0,0,0);
+
+  const day=d.getDay();
+
+  const diff=
+    day===0 ? -6 : 1-day;
+
+  d.setDate(d.getDate()+diff);
+
+  return d;
+
+}
+
+
+function addDays(date,n){
+
+  const d=new Date(date);
+
+  d.setDate(d.getDate()+n);
+
+  return d;
+
+}
+
+
+function getWeekDates(start){
+
+  return Array.from(
+    {length:7},
+    (_,i)=>addDays(start,i)
+  );
+
+}
+
+
+function money(n){
+
+  return n.toLocaleString("ko-KR")+"원";
+
+}
+
+
+/* =========================
+   주간 벌금
+========================= */
+
+function weekFine(start,records=myData.records||{}){
+
+  const dates=
+    getWeekDates(start);
+
+  const count=
+    dates.filter(
+      d=>records[dateKey(d)]?.done
+    ).length;
+
+  return count<4 ? 5000 : 0;
+
+}
+
+
+/* =========================
+   누적 벌금
+========================= */
+
+function calculateTotalFine(records=myData.records||{}){
+
+  const weeks={};
+
+  Object.keys(records).forEach(key=>{
+
+    const monday=
+      getMonday(parseKey(key));
+
+    weeks[dateKey(monday)]=true;
+
+  });
+
+  let total=0;
+
+  Object.keys(weeks).forEach(wk=>{
+
+    total+=
+      weekFine(parseKey(wk),records);
+
+  });
+
+  return total;
+
+}
+
+
+/* =========================
+   화면
+========================= */
+
+function render(){
+
+  const dates=
+    getWeekDates(currentWeekStart);
+
+  const records=
+    myData.records||{};
+
+  const count=
+    dates.filter(
+      d=>records[dateKey(d)]?.done
+    ).length;
+
+  const first=dates[0];
+  const last=dates[6];
+
+  document.getElementById("weekTitle").textContent=
+    `${first.getFullYear()}.${String(first.getMonth()+1).padStart(2,"0")}.${String(first.getDate()).padStart(2,"0")} ~ ${last.getFullYear()}.${String(last.getMonth()+1).padStart(2,"0")}.${String(last.getDate()).padStart(2,"0")}`;
+
+  document.getElementById("weeklyCount").textContent=
+    `${count} / 7일`;
+
+  document.getElementById("weeklyFine").textContent=
+    money(weekFine(currentWeekStart));
+
+  document.getElementById("totalFine").textContent=
+    money(calculateTotalFine());
+
+
+  const daysEl=
+    document.getElementById("days");
+
+  daysEl.innerHTML="";
+
+
+  dates.forEach((date,i)=>{
+
+    const key=dateKey(date);
+
+    const rec=records[key];
+
+    const div=
+      document.createElement("div");
+
+    div.className=
+      "day"+(rec?.done?" checked":"");
+
+    div.onclick=
+      ()=>selectDate(date);
+
+    div.innerHTML=`
+
+      <div class="dow">${DOW[i]}</div>
+
+      <div class="date">
+        ${date.getMonth()+1}/${date.getDate()}
+      </div>
+
+      <div class="status">
+        ${rec?.done?"✅":"○"}
+      </div>
+
+    `;
+
+    daysEl.appendChild(div);
+
+  });
+
+
+  updateStatus(count);
+
+  renderHistory();
+
+  if(selectedDate)
+    loadSelected();
+
+}
+
+
+/* =========================
+   상태
+========================= */
+
+function updateStatus(count){
+
+  const box=
+    document.getElementById("statusBox");
+
+  if(count>=4){
+
+    box.className=
+      "status-box success";
+
+    box.textContent=
+      `🎉 이번 주 목표 달성! ${count}일 운동했습니다. 벌금은 없습니다.`;
+
+  }
+  else{
+
+    box.className=
+      "status-box warning";
+
+    box.textContent=
+      `⚠️ 현재 ${count}일 운동했습니다. ${4-count}일 더 운동해야 이번 주 벌금을 피할 수 있습니다.`;
+
+  }
+
+}
+
+
+/* =========================
+   날짜 선택
+========================= */
+
+function selectDate(date){
+
+  selectedDate=
+    dateKey(date);
+
+  loadSelected();
+
+}
+
+
+function loadSelected(){
+
+  if(!selectedDate) return;
+
+  const records=
+    myData.records||{};
+
+  const rec=
+    records[selectedDate]||{};
+
+  const date=
+    parseKey(selectedDate);
+
+  document.getElementById("recordTitle").textContent=
+    `📝 ${date.getFullYear()}년 ${date.getMonth()+1}월 ${date.getDate()}일 기록`;
+
+  document.getElementById("exercise").value=
+    rec.exercise||"";
+
+  document.getElementById("duration").value=
+    rec.duration||"";
+
+  document.getElementById("memo").value=
+    rec.memo||"";
+
+}
+
+
+/* =========================
+   기록 저장
+========================= */
+
+function saveRecord(){
+
+  if(!currentUser){
+
+    alert("먼저 Google 로그인을 해주세요.");
 
     return;
 
   }
 
-  if (!selectedDate) {
+  if(!selectedDate){
 
     alert("먼저 날짜를 선택해주세요.");
 
@@ -677,26 +868,21 @@ function saveRecord() {
 
   }
 
-  const exercise =
-    document.getElementById("exercise").value.trim();
+  const record={
 
-  const duration =
-    document.getElementById("duration").value.trim();
+    done:true,
 
-  const memo =
-    document.getElementById("memo").value.trim();
+    exercise:
+      document.getElementById("exercise").value.trim(),
 
-  const record = {
+    duration:
+      document.getElementById("duration").value.trim(),
 
-    done: true,
-
-    exercise: exercise,
-
-    duration: duration,
-
-    memo: memo
+    memo:
+      document.getElementById("memo").value.trim()
 
   };
+
 
   db.ref(
     "users/" +
@@ -705,38 +891,38 @@ function saveRecord() {
     selectedDate
   )
   .set(record)
-  .then(() => {
 
-    if (!myData.records)
-      myData.records = {};
+  .then(()=>{
 
-    myData.records[selectedDate] = record;
+    if(!myData.records)
+      myData.records={};
+
+    myData.records[selectedDate]=record;
 
     render();
 
     alert("운동 기록이 저장되었습니다!");
 
   })
-  .catch(error => {
+
+  .catch(error=>{
 
     console.error(error);
 
-    alert("저장에 실패했습니다.");
+    alert("저장에 실패했습니다.\n"+error.message);
 
   });
 
 }
 
 
-/* -----------------------------
+/* =========================
    기록 삭제
------------------------------ */
+========================= */
 
-function deleteRecord() {
+function deleteRecord(){
 
-  if (!currentUser) return;
-
-  if (!selectedDate) {
+  if(!selectedDate){
 
     alert("먼저 날짜를 선택해주세요.");
 
@@ -744,7 +930,7 @@ function deleteRecord() {
 
   }
 
-  if (!confirm("이 날짜의 운동 기록을 삭제할까요?"))
+  if(!confirm("이 날짜의 운동 기록을 삭제할까요?"))
     return;
 
   db.ref(
@@ -754,9 +940,10 @@ function deleteRecord() {
     selectedDate
   )
   .remove()
-  .then(() => {
 
-    if (myData.records)
+  .then(()=>{
+
+    if(myData.records)
       delete myData.records[selectedDate];
 
     loadSelected();
@@ -768,321 +955,170 @@ function deleteRecord() {
 }
 
 
-/* -----------------------------
-   주간 벌금
------------------------------ */
+/* =========================
+   주 이동
+========================= */
 
-function weekFine(start) {
+function moveWeek(n){
 
-  const dates = getWeekDates(start);
+  currentWeekStart=
+    addDays(currentWeekStart,n*7);
 
-  const records = myData.records || {};
+  selectedDate=null;
 
-  const count =
-    dates.filter(
-      d => records[dateKey(d)]?.done
-    ).length;
+  document.getElementById("recordTitle").textContent=
+    "날짜를 선택하세요";
 
-  return count < 4 ? 5000 : 0;
+  document.getElementById("exercise").value="";
+  document.getElementById("duration").value="";
+  document.getElementById("memo").value="";
 
-}
-
-
-/* -----------------------------
-   누적 벌금
------------------------------ */
-
-function calculateTotalFine() {
-
-  const records = myData.records || {};
-
-  const weeks = {};
-
-  Object.keys(records).forEach(key => {
-
-    const d = parseKey(key);
-
-    const monday = getMonday(d);
-
-    const wk = dateKey(monday);
-
-    weeks[wk] = true;
-
-  });
-
-  let total = 0;
-
-  Object.keys(weeks).forEach(wk => {
-
-    total += weekFine(parseKey(wk));
-
-  });
-
-  return total;
+  render();
 
 }
 
 
-/* -----------------------------
-   화면 출력
------------------------------ */
+function goToday(){
 
-function render() {
+  currentWeekStart=
+    getMonday(new Date());
 
-  const dates =
-    getWeekDates(currentWeekStart);
+  selectedDate=null;
 
-  const records =
-    myData.records || {};
+  render();
 
-  const count =
-    dates.filter(
-      d => records[dateKey(d)]?.done
-    ).length;
+}
 
 
-  const first = dates[0];
+/* =========================
+   전체 사용자
+========================= */
 
-  const last = dates[6];
+function listenMembers(){
 
+  db.ref("users").on("value",snapshot=>{
 
-  document.getElementById("weekTitle").textContent =
-    `${first.getFullYear()}.${String(first.getMonth()+1).padStart(2,"0")}.${String(first.getDate()).padStart(2,"0")} ~ ${last.getFullYear()}.${String(last.getMonth()+1).padStart(2,"0")}.${String(last.getDate()).padStart(2,"0")}`;
+    renderMembers(
+      snapshot.val()||{}
+    );
 
+  });
 
-  document.getElementById("weeklyCount").textContent =
-    `${count} / 7일`;
-
-
-  document.getElementById("weeklyFine").textContent =
-    money(weekFine(currentWeekStart));
-
-
-  document.getElementById("totalFine").textContent =
-    money(calculateTotalFine());
+}
 
 
-  const daysEl =
-    document.getElementById("days");
+function renderMembers(users){
 
-  daysEl.innerHTML = "";
+  const el=
+    document.getElementById("members");
 
+  const list=
+    Object.entries(users);
 
-  dates.forEach((date,i) => {
+  if(!list.length){
 
-    const key = dateKey(date);
+    el.innerHTML=
+      '<div class="empty">등록된 사용자가 없습니다.</div>';
 
-    const rec = records[key];
+    return;
 
-
-    const div =
-      document.createElement("div");
-
-
-    div.className =
-      "day" +
-      (rec?.done ? " checked" : "");
+  }
 
 
-    div.onclick =
-      () => selectDate(date);
+  const weekStart=
+    getMonday(new Date());
+
+  const weekDates=
+    getWeekDates(weekStart);
 
 
-    div.innerHTML = `
+  let html=`
 
-      <div class="dow">
-        ${DOW[i]}
-      </div>
+    <div class="member-row member-header">
+      <div>이름</div>
+      <div>이번 주</div>
+      <div>누적 벌금</div>
+    </div>
 
-      <div class="date">
-        ${date.getMonth()+1}/${date.getDate()}
-      </div>
+  `;
 
-      <div class="status">
-        ${rec?.done ? "✅" : "○"}
+
+  list.forEach(([uid,user])=>{
+
+    const records=
+      user.records||{};
+
+    const count=
+      weekDates.filter(
+        d=>records[dateKey(d)]?.done
+      ).length;
+
+    const fine=
+      calculateTotalFine(records);
+
+    html+=`
+
+      <div class="member-row">
+
+        <div>
+          ${escapeHtml(user.name||"사용자")}
+        </div>
+
+        <div>
+          ${count} / 7일
+        </div>
+
+        <div>
+          ${money(fine)}
+        </div>
+
       </div>
 
     `;
 
-
-    daysEl.appendChild(div);
-
   });
 
 
-  updateStatus(count);
-
-  renderHistory();
-
-  if (selectedDate)
-    loadSelected();
+  el.innerHTML=html;
 
 }
 
 
-/* -----------------------------
-   상태 메시지
------------------------------ */
-
-function updateStatus(count) {
-
-  const box =
-    document.getElementById("statusBox");
-
-
-  if (count >= 4) {
-
-    box.className =
-      "status-box success";
-
-    box.textContent =
-      `🎉 이번 주 목표 달성! ${count}일 운동했습니다. 벌금은 없습니다.`;
-
-  } else {
-
-    const need = 4-count;
-
-    box.className =
-      "status-box warning";
-
-    box.textContent =
-      `⚠️ 현재 ${count}일 운동했습니다. ${need}일 더 운동해야 이번 주 벌금을 피할 수 있습니다.`;
-
-  }
-
-}
-
-
-/* -----------------------------
-   날짜 선택
------------------------------ */
-
-function selectDate(date) {
-
-  selectedDate =
-    dateKey(date);
-
-  loadSelected();
-
-}
-
-
-function loadSelected() {
-
-  if (!selectedDate)
-    return;
-
-  const records =
-    myData.records || {};
-
-  const rec =
-    records[selectedDate] || {};
-
-
-  const date =
-    parseKey(selectedDate);
-
-
-  document.getElementById("recordTitle").textContent =
-    `📝 ${date.getFullYear()}년 ${date.getMonth()+1}월 ${date.getDate()}일 기록`;
-
-
-  document.getElementById("exercise").value =
-    rec.exercise || "";
-
-
-  document.getElementById("duration").value =
-    rec.duration || "";
-
-
-  document.getElementById("memo").value =
-    rec.memo || "";
-
-}
-
-
-/* -----------------------------
-   주간 이동
------------------------------ */
-
-function moveWeek(n) {
-
-  currentWeekStart =
-    addDays(currentWeekStart,n*7);
-
-  selectedDate = null;
-
-  document.getElementById("recordTitle").textContent =
-    "날짜를 선택하세요";
-
-  document.getElementById("exercise").value = "";
-
-  document.getElementById("duration").value = "";
-
-  document.getElementById("memo").value = "";
-
-  render();
-
-}
-
-
-function goToday() {
-
-  currentWeekStart =
-    getMonday(new Date());
-
-  selectedDate = null;
-
-  render();
-
-}
-
-
-/* -----------------------------
+/* =========================
    지난 기록
------------------------------ */
+========================= */
 
-function renderHistory() {
+function renderHistory(){
 
-  const el =
+  const el=
     document.getElementById("history");
 
-  const records =
-    myData.records || {};
+  const records=
+    myData.records||{};
 
-  const weekStarts = [];
+  const weeks={};
 
-  const seen = new Set();
+  Object.keys(records).forEach(key=>{
 
-
-  Object.keys(records).forEach(key => {
-
-    const mondayKey =
+    const monday=
       dateKey(
         getMonday(parseKey(key))
       );
 
-    if (!seen.has(mondayKey)) {
-
-      seen.add(mondayKey);
-
-      weekStarts.push(
-        parseKey(mondayKey)
-      );
-
-    }
+    weeks[monday]=true;
 
   });
 
 
-  weekStarts.sort(
-    (a,b)=>b-a
-  );
+  const list=
+    Object.keys(weeks)
+      .map(key=>parseKey(key))
+      .sort((a,b)=>b-a);
 
 
-  if (!weekStarts.length) {
+  if(!list.length){
 
-    el.innerHTML =
+    el.innerHTML=
       '<div class="empty">아직 저장된 운동 기록이 없습니다.</div>';
 
     return;
@@ -1090,10 +1126,10 @@ function renderHistory() {
   }
 
 
-  el.innerHTML = `
+  el.innerHTML=`
 
     <div class="history-row"
-         style="font-weight:700;">
+         style="font-weight:700">
 
       <div>주차</div>
       <div>운동</div>
@@ -1101,19 +1137,18 @@ function renderHistory() {
 
     </div>
 
-    ${weekStarts.map(start => {
+    ${list.map(start=>{
 
-      const dates =
+      const dates=
         getWeekDates(start);
 
-      const count =
+      const count=
         dates.filter(
-          d => records[dateKey(d)]?.done
+          d=>records[dateKey(d)]?.done
         ).length;
 
-      const fine =
-        weekFine(start);
-
+      const fine=
+        weekFine(start,records);
 
       return `
 
@@ -1144,183 +1179,18 @@ function renderHistory() {
 }
 
 
-/* -----------------------------
-   전체 사용자 현황
------------------------------ */
-
-function listenMembers() {
-
-  db.ref("users").on("value", snapshot => {
-
-    const users =
-      snapshot.val() || {};
-
-    renderMembers(users);
-
-  });
-
-}
-
-
-function renderMembers(users) {
-
-  const el =
-    document.getElementById("members");
-
-
-  const userList =
-    Object.entries(users);
-
-
-  if (!userList.length) {
-
-    el.innerHTML =
-      '<div class="empty">등록된 사용자가 없습니다.</div>';
-
-    return;
-
-  }
-
-
-  const today =
-    new Date();
-
-  const weekStart =
-    getMonday(today);
-
-  const weekDates =
-    getWeekDates(weekStart);
-
-
-  let html = `
-
-    <div class="member-row member-header">
-
-      <div>이름</div>
-
-      <div>이번 주</div>
-
-      <div>벌금</div>
-
-    </div>
-
-  `;
-
-
-  userList.forEach(([uid,user]) => {
-
-    const records =
-      user.records || {};
-
-
-    const count =
-      weekDates.filter(
-        d => records[dateKey(d)]?.done
-      ).length;
-
-
-    const fine =
-      calculateUserTotalFine(records);
-
-
-    const name =
-      user.name || "이름 미등록";
-
-
-    html += `
-
-      <div class="member-row">
-
-        <div>
-          ${escapeHtml(name)}
-        </div>
-
-        <div>
-          ${count} / 7일
-        </div>
-
-        <div>
-          ${money(fine)}
-        </div>
-
-      </div>
-
-    `;
-
-  });
-
-
-  el.innerHTML = html;
-
-}
-
-
-/* -----------------------------
-   다른 사용자의 누적 벌금
------------------------------ */
-
-function calculateUserTotalFine(records) {
-
-  const weeks = {};
-
-  Object.keys(records || {}).forEach(key => {
-
-    const monday =
-      getMonday(parseKey(key));
-
-    const wk =
-      dateKey(monday);
-
-    weeks[wk] = true;
-
-  });
-
-
-  let total = 0;
-
-
-  Object.keys(weeks).forEach(wk => {
-
-    const start =
-      parseKey(wk);
-
-    const dates =
-      getWeekDates(start);
-
-
-    const count =
-      dates.filter(
-        d => records[dateKey(d)]?.done
-      ).length;
-
-
-    if (count < 4)
-      total += 5000;
-
-  });
-
-
-  return total;
-
-}
-
-
-/* -----------------------------
-   보안용 HTML 처리
------------------------------ */
-
-function escapeHtml(text) {
+/* =========================
+   HTML 보안
+========================= */
+
+function escapeHtml(text){
 
   return String(text)
 
     .replaceAll("&","&amp;")
-
     .replaceAll("<","&lt;")
-
     .replaceAll(">","&gt;")
-
     .replaceAll('"',"&quot;")
-
     .replaceAll("'","&#039;");
 
 }
