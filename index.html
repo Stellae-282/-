@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>운동일지 & 벌금 관리</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Arial, "Noto Sans KR", sans-serif;
+    background: #f5f6f8;
+    color: #222;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 16px 50px;
+  }
+  h1 { margin: 0 0 6px; font-size: 30px; }
+  .subtitle { color: #777; margin-bottom: 22px; }
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .card {
+    background: white;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.06);
+  }
+  .label { color: #777; font-size: 14px; margin-bottom: 8px; }
+  .value { font-size: 25px; font-weight: 700; }
+  .weekbar {
+    background: white;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.06);
+  }
+  .week-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  button {
+    border: 0;
+    border-radius: 9px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 14px;
+    background: #222;
+    color: white;
+  }
+  button.secondary { background: #e9eaed; color: #333; }
+  button.danger { background: #d93025; }
+  .week-title { font-weight: 700; font-size: 18px; text-align: center; }
+  .days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .day {
+    background: #f0f1f3;
+    border-radius: 12px;
+    padding: 12px 5px;
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: .15s;
+  }
+  .day:hover { transform: translateY(-1px); }
+  .day.checked { background: #e5f7ea; border-color: #35a853; }
+  .day .dow { font-size: 13px; color: #666; }
+  .day .date { font-size: 16px; font-weight: 700; margin: 6px 0; }
+  .day .status { font-size: 20px; }
+  .record {
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.06);
+  }
+  .record h2 { margin: 0 0 5px; }
+  .hint { color: #777; font-size: 13px; margin-bottom: 16px; }
+  label { display: block; font-weight: 700; margin: 14px 0 7px; }
+  input, textarea {
+    width: 100%;
+    border: 1px solid #d5d7db;
+    border-radius: 9px;
+    padding: 11px;
+    font-size: 15px;
+    font-family: inherit;
+  }
+  textarea { min-height: 110px; resize: vertical; }
+  .record-actions { display: flex; gap: 8px; margin-top: 16px; }
+  .status-box {
+    margin-top: 18px;
+    padding: 15px;
+    border-radius: 10px;
+    background: #f1f3f4;
+    font-weight: 700;
+  }
+  .status-box.warning { background: #fff0f0; color: #c5221f; }
+  .status-box.success { background: #e8f5e9; color: #188038; }
+  .history {
+    margin-top: 18px;
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.06);
+  }
+  .history h2 { margin-top: 0; }
+  .history-row {
+    display: grid;
+    grid-template-columns: 1.2fr .8fr .8fr;
+    gap: 8px;
+    padding: 11px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+  }
+  .history-row:last-child { border-bottom: 0; }
+  .empty { color: #888; padding: 10px 0; }
+  .footer { text-align: center; color: #888; font-size: 12px; margin-top: 20px; }
+
+  @media (max-width: 650px) {
+    .container { padding: 18px 10px 35px; }
+    h1 { font-size: 25px; }
+    .summary { grid-template-columns: 1fr; }
+    .days { gap: 4px; }
+    .day { padding: 9px 2px; }
+    .day .dow { font-size: 11px; }
+    .day .date { font-size: 13px; }
+    .day .status { font-size: 17px; }
+    .week-nav button { padding: 8px 9px; }
+    .week-title { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🏋️ 운동일지</h1>
+  <div class="subtitle">일주일에 4일 이상 운동하기</div>
+
+  <div class="summary">
+    <div class="card">
+      <div class="label">이번 주 운동</div>
+      <div class="value" id="weeklyCount">0 / 7일</div>
+    </div>
+    <div class="card">
+      <div class="label">이번 주 벌금</div>
+      <div class="value" id="weeklyFine">0원</div>
+    </div>
+    <div class="card">
+      <div class="label">누적 벌금</div>
+      <div class="value" id="totalFine">0원</div>
+    </div>
+  </div>
+
+  <div class="weekbar">
+    <div class="week-nav">
+      <button class="secondary" onclick="moveWeek(-1)">← 이전 주</button>
+      <div class="week-title" id="weekTitle"></div>
+      <button class="secondary" onclick="moveWeek(1)">다음 주 →</button>
+    </div>
+    <div style="text-align:center;margin-top:10px;">
+      <button onclick="goToday()">이번 주로</button>
+    </div>
+    <div class="days" id="days"></div>
+  </div>
+
+  <div class="record">
+    <h2 id="recordTitle">날짜를 선택하세요</h2>
+    <div class="hint">운동한 날을 선택하면 운동 기록을 작성할 수 있습니다.</div>
+
+    <label for="exercise">운동 종류</label>
+    <input id="exercise" placeholder="예: 헬스, 러닝, 등 운동">
+
+    <label for="duration">운동 시간</label>
+    <input id="duration" placeholder="예: 1시간 20분">
+
+    <label for="memo">운동 내용 / 메모</label>
+    <textarea id="memo" placeholder="오늘 한 운동이나 느낀 점을 적어보세요."></textarea>
+
+    <div class="record-actions">
+      <button onclick="saveRecord()">💾 저장</button>
+      <button class="danger" onclick="deleteRecord()">기록 삭제</button>
+    </div>
+  </div>
+
+  <div class="status-box" id="statusBox"></div>
+
+  <div class="history">
+    <h2>📊 지난 주 기록</h2>
+    <div id="history"></div>
+  </div>
+
+  <div class="footer">데이터는 현재 브라우저에 자동 저장됩니다.</div>
+</div>
+
+<script>
+const STORAGE_KEY = "workoutDiary_v1";
+let data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+let selectedDate = null;
+let currentWeekStart = getMonday(new Date());
+
+const DOW = ["월", "화", "수", "목", "금", "토", "일"];
+
+function dateKey(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth()+1).padStart(2,"0");
+  const d = String(date.getDate()).padStart(2,"0");
+  return `${y}-${m}-${d}`;
+}
+
+function parseKey(key) {
+  const [y,m,d] = key.split("-").map(Number);
+  return new Date(y,m-1,d);
+}
+
+function getMonday(date) {
+  const d = new Date(date);
+  d.setHours(0,0,0,0);
+  const day = d.getDay();
+  const diff = day === 0 ? -6 : 1-day;
+  d.setDate(d.getDate()+diff);
+  return d;
+}
+
+function addDays(date, n) {
+  const d = new Date(date);
+  d.setDate(d.getDate()+n);
+  return d;
+}
+
+function money(n) {
+  return n.toLocaleString("ko-KR") + "원";
+}
+
+function saveAll() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function getWeekDates(start) {
+  return Array.from({length:7}, (_,i)=>addDays(start,i));
+}
+
+function weekFine(start) {
+  const dates = getWeekDates(start);
+  const count = dates.filter(d => data[dateKey(d)]?.done).length;
+  return count < 4 ? 5000 : 0;
+}
+
+function render() {
+  const dates = getWeekDates(currentWeekStart);
+  const count = dates.filter(d => data[dateKey(d)]?.done).length;
+
+  const first = dates[0];
+  const last = dates[6];
+  document.getElementById("weekTitle").textContent =
+    `${first.getFullYear()}.${String(first.getMonth()+1).padStart(2,"0")}.${String(first.getDate()).padStart(2,"0")} ~ ${last.getFullYear()}.${String(last.getMonth()+1).padStart(2,"0")}.${String(last.getDate()).padStart(2,"0")}`;
+
+  document.getElementById("weeklyCount").textContent = `${count} / 7일`;
+  document.getElementById("weeklyFine").textContent = money(weekFine(currentWeekStart));
+
+  const totalFine = calculateTotalFine();
+  document.getElementById("totalFine").textContent = money(totalFine);
+
+  const daysEl = document.getElementById("days");
+  daysEl.innerHTML = "";
+  dates.forEach((date,i) => {
+    const key = dateKey(date);
+    const rec = data[key];
+    const div = document.createElement("div");
+    div.className = "day" + (rec?.done ? " checked" : "");
+    div.onclick = () => selectDate(date);
+    div.innerHTML = `
+      <div class="dow">${DOW[i]}</div>
+      <div class="date">${date.getMonth()+1}/${date.getDate()}</div>
+      <div class="status">${rec?.done ? "✅" : "○"}</div>
+    `;
+    daysEl.appendChild(div);
+  });
+
+  updateStatus(count);
+  renderHistory();
+  if (selectedDate) loadSelected();
+}
+
+function updateStatus(count) {
+  const box = document.getElementById("statusBox");
+  if (count >= 4) {
+    box.className = "status-box success";
+    box.textContent = `🎉 이번 주 목표 달성! ${count}일 운동했습니다. 벌금은 없습니다.`;
+  } else {
+    const need = 4-count;
+    box.className = "status-box warning";
+    box.textContent = `⚠️ 현재 ${count}일 운동했습니다. ${need}일 더 운동해야 이번 주 벌금을 피할 수 있습니다.`;
+  }
+}
+
+function selectDate(date) {
+  selectedDate = dateKey(date);
+  loadSelected();
+}
+
+function loadSelected() {
+  const rec = data[selectedDate] || {};
+  const date = parseKey(selectedDate);
+  document.getElementById("recordTitle").textContent =
+    `📝 ${date.getFullYear()}년 ${date.getMonth()+1}월 ${date.getDate()}일 기록`;
+  document.getElementById("exercise").value = rec.exercise || "";
+  document.getElementById("duration").value = rec.duration || "";
+  document.getElementById("memo").value = rec.memo || "";
+}
+
+function saveRecord() {
+  if (!selectedDate) {
+    alert("먼저 날짜를 선택해주세요.");
+    return;
+  }
+  data[selectedDate] = {
+    done: true,
+    exercise: document.getElementById("exercise").value.trim(),
+    duration: document.getElementById("duration").value.trim(),
+    memo: document.getElementById("memo").value.trim()
+  };
+  saveAll();
+  render();
+  alert("운동 기록이 저장되었습니다!");
+}
+
+function deleteRecord() {
+  if (!selectedDate) {
+    alert("먼저 날짜를 선택해주세요.");
+    return;
+  }
+  if (!confirm("이 날짜의 운동 기록을 삭제할까요?")) return;
+  delete data[selectedDate];
+  saveAll();
+  loadSelected();
+  render();
+}
+
+function moveWeek(n) {
+  currentWeekStart = addDays(currentWeekStart, n*7);
+  selectedDate = null;
+  document.getElementById("recordTitle").textContent = "날짜를 선택하세요";
+  document.getElementById("exercise").value = "";
+  document.getElementById("duration").value = "";
+  document.getElementById("memo").value = "";
+  render();
+}
+
+function goToday() {
+  currentWeekStart = getMonday(new Date());
+  selectedDate = null;
+  render();
+}
+
+function calculateTotalFine() {
+  const weeks = {};
+  Object.keys(data).forEach(key => {
+    const d = parseKey(key);
+    const monday = getMonday(d);
+    const wk = dateKey(monday);
+    weeks[wk] = true;
+  });
+  let total = 0;
+  Object.keys(weeks).forEach(wk => total += weekFine(parseKey(wk)));
+  return total;
+}
+
+function renderHistory() {
+  const el = document.getElementById("history");
+  const weekStarts = [];
+  const seen = new Set();
+
+  Object.keys(data).forEach(key => {
+    const mondayKey = dateKey(getMonday(parseKey(key)));
+    if (!seen.has(mondayKey)) {
+      seen.add(mondayKey);
+      weekStarts.push(parseKey(mondayKey));
+    }
+  });
+
+  weekStarts.sort((a,b)=>b-a);
+  if (!weekStarts.length) {
+    el.innerHTML = '<div class="empty">아직 저장된 운동 기록이 없습니다.</div>';
+    return;
+  }
+
+  el.innerHTML = `
+    <div class="history-row" style="font-weight:700;">
+      <div>주차</div><div>운동</div><div>벌금</div>
+    </div>
+    ${weekStarts.map(start => {
+      const dates = getWeekDates(start);
+      const count = dates.filter(d => data[dateKey(d)]?.done).length;
+      const fine = weekFine(start);
+      return `<div class="history-row">
+        <div>${start.getFullYear()}.${start.getMonth()+1}.${start.getDate()} 주</div>
+        <div>${count} / 7일</div>
+        <div>${money(fine)}</div>
+      </div>`;
+    }).join("")}
+  `;
+}
+
+render();
+</script>
+</body>
+</html>
